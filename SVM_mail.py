@@ -25,9 +25,9 @@ def trainSVM(trainData,trainLabel):
 	classifier = svm.SVC(C=10.0,kernel='linear') #Penalty parameter C is too high, may overfit
 	return classifier.fit(trainData,trainLabel)
 
-def mailfilter():
+def mailfilter(K):
     txtList=[]; classList = []; fullText =[]
-    for i in range(1,41):
+    for i in range(1,K+1):
         wordList = textList(open('spam/%d.txt' % i).read())
         #print (wordList)
         txtList.append(wordList)
@@ -38,11 +38,11 @@ def mailfilter():
         fullText.extend(wordList)
         classList.append(0)
     vocabList = creatVocabList(txtList) #create vocabulary
-    trainingSet = list(range(80))
+    trainingSet = list(range(2*K))
 
     #create test set
     testSet=[] 
-    for i in range(20):
+    for i in range(int(K/2)):
         randIndex = int(random.uniform(0,len(trainingSet)))
         testSet.append(trainingSet[randIndex])
         del(trainingSet[randIndex]) 
@@ -65,20 +65,20 @@ def mailfilter():
         elif (clf.predict(array(wordVector))==0 and classList[i]==1):
             errorCount += 1
             shouldSpam += 1
-            print ("Classification error",txtList[i])
+            #print ("Classification error",txtList[i])
         elif (clf.predict(array(wordVector))==1 and classList[i]==0):
             errorCount += 1
             shouldHam +=1
-            print ("Classification error",txtList[i])
+            #print ("Classification error",txtList[i])
     Recall=right/(right+shouldSpam)
     Precision=right/(right+shouldHam)
     Error=errorCount/len(testSet)
-    print('Recall:',Recall)
-    print('Precision:',Precision)
-    print ('Error rate: ',Error)
+    #print('Recall:',Recall)
+    #print('Precision:',Precision)
+    #print ('Error rate: ',Error)
     end = time.clock()
     Time=end-start
-    print("Time:",Time,"s")
+    #print("Time:",Time,"s")
     #return vocabList,fullText
     return Recall,Precision,Error,Time
 
@@ -90,24 +90,36 @@ AveRecall=0
 AvePrecision=0
 AveError=0
 AveTime=0
-while i<10:
-    Recall,Precision,Error,Time=mailfilter()
-    AveRecall=AveRecall+Recall
-    AvePrecision=AvePrecision+Precision
-    AveError=AveError+Error
-    AveTime=AveTime+Time
-    if(Recall>MaxRecall):
-        MaxRecall=Recall
-    if(Precision>MaxPrecision):
-        MaxPrecision=Precision
-    if(MinError>Error):
-        MinError=Error
-    i+=1
-print('***************************')
-print('MaxRecall:',MaxRecall)
-print('MaxPrecision:',MaxPrecision)
-print('MinError:',MinError)
-print('AveRecall:',AveRecall/i)
-print('AvePrecision:',AvePrecision/i)
-print('AveError:',AveError/i)
-print('AveTime:',AveTime/i)
+K=10
+while K<=80:
+    while i<10:
+        Recall,Precision,Error,Time=mailfilter(K)
+        AveRecall=AveRecall+Recall
+        AvePrecision=AvePrecision+Precision
+        AveError=AveError+Error
+        AveTime=AveTime+Time
+        if(Recall>MaxRecall):
+            MaxRecall=Recall
+        if(Precision>MaxPrecision):
+            MaxPrecision=Precision
+        if(MinError>Error):
+            MinError=Error
+        i+=1
+    print('***************************')
+    print('K=',K)
+    print('MaxRecall:',MaxRecall)
+    print('MaxPrecision:',MaxPrecision)
+    print('MinError:',MinError)
+    print('AveRecall:',AveRecall/i)
+    print('AvePrecision:',AvePrecision/i)
+    print('AveError:',AveError/i)
+    print('AveTime:',AveTime/i)
+    i=0
+    K+=10
+    MaxRecall=0
+    MaxPrecision=0
+    MinError=1
+    AveRecall=0
+    AvePrecision=0
+    AveError=0
+    AveTime=0
