@@ -147,6 +147,23 @@ AveTime: 0.05553739146649517
 Conclusion
 ====
 
+Based on 60 training data and 20 testing data, there’s a chart:
+
 |        Conclusion Chart            |
 |:----------------------------------:|
 | ![Conclusion](pic/Conclusion.png)  |
+
+Update V2.0
+===
+
+Based on 120 training data and 40 testing data:
+
+|               Data Chart           |
+|:----------------------------------:|
+| ![Simple Example](pic/120data.png) |
+
+Each algorithm with different data set and different trend.
+
+|               Time Chart           |
+|:----------------------------------:|
+| ![Simple Example](pic/timepic.png) |
